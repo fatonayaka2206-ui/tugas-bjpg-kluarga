@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watashi No Kazoku</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background: #767673;
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            min-height: 100vh;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== NAVBAR ===== */
+        nav {
+            background: linear-gradient(135deg, #d32f2f, #f44336);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 3px 15px rgba(211, 47, 47, 0.3);
+        }
+
+        nav .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* ===== JUDUL ===== */
+        .judul-section {
+            text-align: center;
+            padding: 50px 20px 30px;
+        }
+
+        .judul-section h1 {
+            font-size: 48px;
+            color: #1a1a1a;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .judul-section h1::after {
+            content: '';
+            display: block;
+            width: 120px;
+            height: 5px;
+            background: #1a1a1a;
+            margin: 15px auto;
+        }
+
+        /* ===== SILSILAH CONTAINER ===== */
+        .silsilah-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 30px 80px;
+            position: relative;
+        }
+
+        /* ===== GENERASI (BARIS) ===== */
+        .generasi {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 60px;
+            position: relative;
+        }
+
+        /* ===== PASANGAN (AYAH - IBU) ===== */
+        .pasangan {
+            display: flex;
+            align-items: flex-start;
+            gap: 140px;
+            position: relative;
+        }
+
+        /* Garis horizontal antara Ayah dan Ibu */
+        .pasangan::before {
+            content: '';
+            position: absolute;
+            top: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 3px;
+            background: #1a1a1a;
+            z-index: 1;
+        }
+
+        /* ===== KARTU ANGGOTA ===== */
+        .anggota {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .anggota:hover {
+            transform: translateY(-5px);
+        }
+
+        /* ===== BINGKAI PERSEGI ===== */
+        .foto-frame {
+            width: 260px;
+            height: 260px;
+            border-radius: 15px;
+            padding: 8px;
+            background: linear-gradient(135deg, #e40e0e, #baadac);
+            box-shadow: 0 8px 25px rgba(178, 119, 119, 0.963);
+            position: relative;
+            transition: 0.4s;
+        }
+
+        .anggota:hover .foto-frame {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(211, 47, 47, 0.5);
+        }
+
+        .foto-frame img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 5px solid white;
+            display: block;
+        }
+
+        .nama-anggota {
+            margin-top: 18px;
+            background: #1a1a1a;
+            color: white;
+            padding: 8px 30px;
+            border-radius: 5px;
+            font-size: 17px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        /* ===== GARIS PENGHUBUNG KE ANAK ===== */
+        .konektor {
+            position: relative;
+            height: 110px;
+            margin: 0 auto;
+        }
+
+        /* Garis vertikal dari pasangan turun */
+        .konektor .turun {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 55px;
+            background: #1a1a1a;
+        }
+
+        /* Garis horizontal penghubung anak */
+        .konektor .horizontal {
+            position: absolute;
+            top: 55px;
+            left: 15%;
+            right: 15%;
+            height: 3px;
+            background: #1a1a1a;
+        }
+
+        /* Garis vertikal naik ke setiap anak */
+        .konektor .naik {
+            position: absolute;
+            top: 55px;
+            width: 3px;
+            height: 55px;
+            background: #1a1a1a;
+        }
+
+        .konektor .naik:nth-child(3) { left: 15%; }
+        .konektor .naik:nth-child(4) { left: 50%; transform: translateX(-50%); }
+        .konektor .naik:nth-child(5) { left: 85%; }
+
+        /* ===== KELOMPOK ANAK ===== */
+        .anak-group {
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+        }
+
+        /* ===== INFO BOX (TOOLTIP) ===== */
+        .info-box {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 14px 22px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 10;
+            width: 250px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .info-box::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 15px;
+            height: 15px;
+            background: white;
+        }
+
+        .anggota:hover .info-box {
+            display: block;
+        }
+
+        .info-box .kanji-info {
+            font-size: 28px;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .info-box .romaji-info {
+            font-size: 15px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .info-box .desc-info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        footer .heart {
+            color: #f44336;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .pasangan {
+                gap: 80px;
+            }
+            .pasangan::before {
+                top: 110px;
+                width: 80px;
+            }
+            .foto-frame {
+                width: 220px;
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .pasangan {
+                gap: 50px;
+            }
+            .pasangan::before {
+                top: 90px;
+                width: 50px;
+            }
+            .foto-frame {
+                width: 180px;
+                height: 180px;
+            }
+            .nama-anggota {
+                font-size: 14px;
+                padding: 6px 20px;
+            }
+            .anak-group {
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .judul-section h1 {
+                font-size: 26px;
+                letter-spacing: 2px;
+            }
+            nav {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .pasangan {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .pasangan::before {
+                display: none;
+            }
+            .foto-frame {
+                width: 160px;
+                height: 160px;
+            }
+            .anak-group {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+            .konektor {
+                height: 40px;
+            }
+            .konektor .horizontal,
+            .konektor .naik {
+                display: none;
+            }
+            .konektor .turun {
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">🌸 わたし の かぞく</div>
+        <ul>
+            <li><a href="#silsilah">Silsilah</a></li>
+        </ul>
+    </nav>
+
+    <!-- JUDUL -->
+    <div class="judul-section">
+        <h1>Watashi No Kazoku</h1>
+    </div>
+
+    <!-- SILSILAH -->
+    <div class="silsilah-wrapper" id="silsilah">
+
+        <!-- ===== GENERASI 1: AYAH & IBU ===== -->
+        <div class="generasi">
+            <div class="pasangan">
+                <div class="anggota">
+                    <div class="foto-frame">
+                        <img src="ayah.jpeg">
+                    </div>
+                    <div class="nama-anggota">AYAH</div>
+                    <div class="info-box">
+                        <div class="kanji-info">ちち</div>
+                        <div class="romaji-info">Chichi</div>
+                        <div class="desc-info">Ayah (keluarga sendiri)</div>
+                    </div>
+                </div>
+
+                <div class="anggota">
+                    <div class="foto-frame">
+                        <img src="bunda.jpeg"Ibu">
+                    </div>
+                    <div class="nama-anggota">IBU</div>
+                    <div class="info-box">
+                        <div class="kanji-info">はは</div>
+                        <div class="romaji-info">Haha</div>
+                        <div class="desc-info">Ibu (keluarga sendiri)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GARIS PENGHUBUNG KE ANAK-ANAK -->
+        <div class="konektor">
+            <div class="turun"></div>
+            <div class="horizontal"></div>
+            <div class="naik"></div>
+            <div class="naik"></div>
+            <div class="naik"></div>
+        </div>
+
+        <!-- ===== GENERASI 2: KAKAK, SAYA, ADIK ===== -->
+        <div class="generasi">
+            <div class="anak-group">
+                <div class="anggota">
+                    <div class="foto-frame">
+                        <img src="bg kaka.jpeg"Kakak">
+                    </div>
+                    <div class="nama-anggota">KAKAK</div>
+                    <div class="info-box">
+                        <div class="kanji-info">あに</div>
+                        <div class="romaji-info">Ani</div>
+                        <div class="desc-info">Kakak Laki Laki (keluarga sendiri)</div>
+                    </div>
+                </div>
+
+                <div class="anggota">
+                    <div class="foto-frame">
+                        <img src="me saya.jpeg"Saya">
+                    </div>
+                    <div class="nama-anggota">SAYA</div>
+                    <div class="info-box">
+                        <div class="kanji-info">わたし</div>
+                        <div class="romaji-info">Watashi</div>
+                        <div class="desc-info">Saya (kata ganti orang pertama)</div>
+                    </div>
+                </div>
+
+                <div class="anggota">
+                    <div class="foto-frame">
+                        <img src="zio.jpeg"Adik">
+                    </div>
+                    <div class="nama-anggota">ADIK</div>
+                    <div class="info-box">
+                        <div class="kanji-info">おとうと</div>
+                        <div class="romaji-info">Otouto</div>
+                        <div class="desc-info">Adik Laki Laki (keluarga sendiri)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="kalimat-container">
+
+            <div class="kalimat-card">
+                <div class="kalimat-jp">これはわたしのかぞくです。</div>
+                <div class="kalimat-romaji">Kore wa watashi no kazoku desu.</div>
+                <div class="kalimat-arti">→ Ini adalah keluarga saya.</div>
+            </div>
+
+            <div class="kalimat-card">
+                <div class="kalimat-jp">わたしのかぞくはごにんです。</div>
+                <div class="kalimat-romaji">Watashi no kazoku wa gonin desu.</div>
+                <div class="kalimat-arti">→ Keluarga saya beranggotakan 5 orang.</div>
+            </div>
+
+            <div class="kalimat-card">
+                <div class="kalimat-jp">わたしとちちとははとあにとおとうとです。</div>
+                <div class="kalimat-romaji">Watashi to chichi to haha to ani to otouto desu.</div>
+                <div class="kalimat-arti">→ Saya, ayah, ibu, kakak laki laki saya, dan adik laki laki saya.</div>
+            </div>
+
+            <div class="kalimat-card">
+                <div class="kalimat-jp">わたしたちはさんにんきょうだいです</div>
+                <div class="kalimat-romaji">Watashitachi wa sannin kyoudai desu.</div>
+                <div class="kalimat-arti">→ Kami bersaudara 3 orang.</div>
+            </div>
+
+            <div class="kalimat-card">
+                <div class="kalimat-jp">わたしはまんなかのこです。</div>
+                <div class="kalimat-romaji">Watashi wa mannoka no ko desu.</div>
+                <div class="kalimat-arti">→ Saya adalah anak tengah.</div>
+            </div>
+
+        </div>
+    </section>
+    <style>.kalimat-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 30px 100px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .kalimat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .kalimat-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 28px 36px;
+            box-shadow: 
+                0 8px 25px rgba(74, 124, 47, 0.10),
+                0 2px 8px rgba(74, 124, 47, 0.06);
+            border: 1px solid rgba(136, 176, 75, 0.25);
+            transition: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kalimat-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: linear-gradient(180deg, var(--matcha), var(--emas));
+            border-radius: 5px 0 0 5px;
+        }
+
+        .kalimat-card:hover {
+            transform: translateX(8px);
+            box-shadow: 
+                0 14px 40px rgba(74, 124, 47, 0.20),
+                0 4px 12px rgba(212, 175, 55, 0.15);
+            border-color: rgba(136, 176, 75, 0.5);
+        }
+
+        .kalimat-jp {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3d2a;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .kalimat-romaji {
+            font-size: 15px;
+            color: #8a9a82;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            font-style: normal;
+        }
+
+        .kalimat-arti {
+            font-size: 15px;
+            color: var(--matcha-tua);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .kalimat-section { padding: 20px 20px 80px; }
+            .kalimat-card { padding: 22px 26px; }
+            .kalimat-jp { font-size: 20px; }
+            .kalimat-romaji, .kalimat-arti { font-size: 14px; }
+        }
+
+        @media (max-width: 600px) {
+            .kalimat-section { padding: 10px 15px 60px; }
+            .kalimat-card { padding: 18px 20px; border-radius: 14px; }
+            .kalimat-jp { font-size: 17px; letter-spacing: 0.5px; }
+            .kalimat-romaji, .kalimat-arti { font-size: 13px; }
+            .kalimat-card:hover { transform: translateX(4px); }
+        }</style>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>🌸 家族 - Kazoku | Silsilah Keluarga 🌸</p>
+        <p>Dibuat dengan <span class="heart">❤️</span> untuk pembelajaran Bahasa Jepang</p>
+        <p style="margin-top:15px; font-size: 12px; color: #888;">© 2025 - Materi Kazoku</p>
+    </footer>
+
+</body>
+</html>
